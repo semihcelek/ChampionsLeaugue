@@ -7,9 +7,9 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
 {
     public class GroupDistributeController
     {
-        private IGroupRepository _groupRepository;
-        private IPotRepository _potRepository;
-        private TeamModelConverter _teamModelConverter;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IPotRepository _potRepository;
+        private readonly TeamModelConverter _teamModelConverter;
 
         public GroupDistributeController(IGroupRepository groupRepository, IPotRepository potRepository)
         {
@@ -27,11 +27,11 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
             {
                 for (int j = 0; j < groups.Count; j++)
                 {
-                    ITeamModel team = _teamModelConverter.ConvertInitialTeamModelToTeamModel(potList[i][j]);
-                    List<ITeamModel> currentGroup = groups[j].GetCompetingTeamsList();
-                    currentGroup.Add(team);
-                    Console.WriteLine(team.GetTeamName());
-                    // After adding to the list, at the last iteration, the original list should be overriden.
+                    IInitialTeamModel initialTeamModelFromPot = potList[i][j];
+                    ITeamModel team = _teamModelConverter.ConvertInitialTeamModelToTeamModel(initialTeamModelFromPot);
+                    IGroupModel currentGroup = groups[j];
+                   
+                    currentGroup.AddTeamToGroup(team);
                 }
             }
         }

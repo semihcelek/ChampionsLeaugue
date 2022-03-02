@@ -11,6 +11,11 @@ namespace SemihCelek.ChampionsLeague.Persistence.Repositories
 
         public GroupRepository()
         {
+            InitializeGroupList();
+        }
+
+        private void InitializeGroupList()
+        {
             _competingGroups = new List<IGroupModel>(8);
 
             for (int i = 0; i < 8; i++)

@@ -12,7 +12,7 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
             _groupName = groupName;
             _competingTeams = new List<ITeamModel>(4);
         }
-
+        
         public char GetGroupName()
         {
             return _groupName;
@@ -21,6 +21,11 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
         public List<ITeamModel> GetCompetingTeamsList()
         {
             return _competingTeams;
+        }
+
+        public void AddTeamToGroup(ITeamModel teamToAdd)
+        {
+            _competingTeams.Add(teamToAdd);
         }
     }
 }

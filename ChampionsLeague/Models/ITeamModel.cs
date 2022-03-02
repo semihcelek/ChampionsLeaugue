@@ -4,8 +4,10 @@ namespace SemihCelek.ChampionsLeague.Models
     {
         string GetTeamName();
         string GetTeamCountryCode();
-        char GetGroup();
         int GetPoints();
         int GetGoals();
+        void AddPoints(int point);
+
+        void AddGoals(int goals);
     }
 }

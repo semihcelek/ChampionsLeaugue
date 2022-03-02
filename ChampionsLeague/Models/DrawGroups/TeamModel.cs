@@ -4,7 +4,6 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
     {
         private string _teamName;
         private string _teamCountryCode;
-        private char _teamGroupName;
         private int _points;
         private int _goals;
 
@@ -12,32 +11,43 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
         {
             _teamName = teamName;
             _teamCountryCode = teamCountryCode;
+            SetupTeam();
         }
 
+        private void SetupTeam()
+        {
+            _goals = 0;
+            _points = 0;
+        }
 
         public string GetTeamName()
         {
-            throw new System.NotImplementedException();
+            return _teamName;
         }
 
         public string GetTeamCountryCode()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public char GetGroup()
-        {
-            throw new System.NotImplementedException();
+            return _teamCountryCode;
         }
 
         public int GetPoints()
         {
-            throw new System.NotImplementedException();
+            return _points;
         }
 
         public int GetGoals()
         {
-            throw new System.NotImplementedException();
+            return _goals;
+        }
+
+        public void AddPoints(int point)
+        {
+            _points += point;
+        }
+
+        public void AddGoals(int goals)
+        {
+            _goals += goals;
         }
     }
 }
