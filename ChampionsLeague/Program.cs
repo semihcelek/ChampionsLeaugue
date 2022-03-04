@@ -41,6 +41,12 @@ namespace SemihCelek.ChampionsLeague
             ILeagueMatchExecutor groupMatchExecutor = new GroupMatchExecutor(groupRepository, groupMatchPerformer);
 
             groupMatchExecutor.ActLeagueMatches();
+
+            ITeamRankSort groupSorter = new GroupMatchTeamSort(groupRepository);
+            groupSorter.SortTeamsInTheirGroups();
+
+            IGroupTeamReducer groupTeamReducer = new GroupMatchTeamReducer(groupRepository);
+            groupTeamReducer.RemoveEliminatedTeams();
         }
     }
 }

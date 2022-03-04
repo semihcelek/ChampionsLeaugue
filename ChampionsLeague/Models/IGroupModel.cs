@@ -6,7 +6,6 @@ namespace SemihCelek.ChampionsLeague.Models
     {
         char GetGroupName();
         List<ITeamModel> GetCompetingTeamsList();
-
         void AddTeamToGroup(ITeamModel teamToAdd);
     }
 }
