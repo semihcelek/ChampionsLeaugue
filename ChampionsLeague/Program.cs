@@ -39,18 +39,14 @@ namespace SemihCelek.ChampionsLeague
             PrepareGroupsController prepareTeams =
                 new PrepareGroupsController(teamPotAdjuster, potRandomizer,
                     groupDistributeController);
-
-            prepareTeams.PrepareGroupsForStartingGroupMatches();
-
+            
             IMatchPerformer groupMatchPerformer = new GroupMatchPerformer(matchRecordRepository);
 
             ILeagueMatchExecutor groupMatchExecutor = new GroupMatchExecutor(groupRepository, groupMatchPerformer);
 
             ExecuteGroupMatchesController groupMatchesController =
                 new ExecuteGroupMatchesController(groupMatchExecutor);
-
-            groupMatchesController.ExecuteGroupMatches();
-
+            
             ITeamRankSort groupSorter = new GroupMatchTeamSort(groupRepository);
 
             IGroupTeamReducer groupTeamReducer = new GroupMatchTeamReducer(groupRepository);
@@ -61,59 +57,67 @@ namespace SemihCelek.ChampionsLeague
 
             PrepareKnockOutMatchesController prepareKnockOutMatchesController =
                 new PrepareKnockOutMatchesController(groupSorter, groupTeamReducer, teamStatsReset, knockoutDraw);
-
-            prepareKnockOutMatchesController.PrepareKnockOutMatches();
-
+            
             ILeagueMatchExecutor knockoutMatchExecutor =
                 new KnockoutMatchExecutor(groupRepository, groupMatchPerformer);
 
             ExecuteKnockOutMatchesController executeKnockOutMatchesController =
                 new ExecuteKnockOutMatchesController(knockoutMatchExecutor);
-            executeKnockOutMatchesController.ExecuteKnockOutMatches();
-
-
+            
             IDrawTeams quarterFinalDraw = new DrawFinalRoundTeam(groupRepository);
 
             PrepareQuarterFinalController quarterFinalController =
                 new PrepareQuarterFinalController(groupSorter, groupTeamReducer, teamStatsReset, quarterFinalDraw);
-            quarterFinalController.PrepareQuarterFinal();
-
-
-            TeamGroupListAdapter.LowerRepositoryListCapacityForNextPhase(groupRepository);
-
+            
             ILeagueMatchExecutor quarterFinalExecutor = new KnockoutMatchExecutor(groupRepository, groupMatchPerformer);
 
             ExecuteQuarterFinalController executeQuarterFinalController =
                 new ExecuteQuarterFinalController(quarterFinalExecutor);
-            executeQuarterFinalController.ExecuteQuarterFinals();
 
             IDrawTeams semiFinalDraw = new DrawFinalRoundTeam(groupRepository);
 
             PrepareSemiFinalController prepareSemiFinalController =
                 new PrepareSemiFinalController(groupSorter, groupTeamReducer, teamStatsReset, semiFinalDraw);
-
-            prepareSemiFinalController.PrepareSemiFinal();
-
-            TeamGroupListAdapter.LowerRepositoryListCapacityForNextPhase(groupRepository);
-
+            
             ILeagueMatchExecutor semiFinalExecutor = new KnockoutMatchExecutor(groupRepository, groupMatchPerformer);
 
             SemiFinalController semiFinalController = new SemiFinalController(semiFinalExecutor);
-            semiFinalController.ExecuteSemiFinalMatches();
 
             IDrawTeams finalDraw = new DrawFinalRoundTeam(groupRepository);
 
             PrepareFinalRound prepareFinalRound =
                 new PrepareFinalRound(groupSorter, groupTeamReducer, teamStatsReset, finalDraw);
+            
+            ILeagueMatchExecutor finalMatch = new KnockoutMatchExecutor(groupRepository, groupMatchPerformer);
+            
+            FinalController finalController = new FinalController(finalMatch);
+
+            prepareTeams.PrepareGroupsForStartingGroupMatches();
+
+            groupMatchesController.ExecuteGroupMatches();
+
+            prepareKnockOutMatchesController.PrepareKnockOutMatches();
+
+            executeKnockOutMatchesController.ExecuteKnockOutMatches();
+
+            quarterFinalController.PrepareQuarterFinal();
+
+            TeamGroupListAdapter.LowerRepositoryListCapacityForNextPhase(groupRepository);
+
+            executeQuarterFinalController.ExecuteQuarterFinals();
+
+            prepareSemiFinalController.PrepareSemiFinal();
+
+            TeamGroupListAdapter.LowerRepositoryListCapacityForNextPhase(groupRepository);
+
+            semiFinalController.ExecuteSemiFinalMatches();
 
             prepareFinalRound.PrepareFinal();
 
             TeamGroupListAdapter.LowerRepositoryListCapacityForNextPhase(groupRepository);
 
-            ILeagueMatchExecutor finalMatch = new KnockoutMatchExecutor(groupRepository, groupMatchPerformer);
-            FinalController finalController = new FinalController(finalMatch);
             finalController.ExecuteFinalMatch();
-            
+
             groupSorter.SortTeamsInTheirGroups();
             groupTeamReducer.RemoveEliminatedTeams();
         }
