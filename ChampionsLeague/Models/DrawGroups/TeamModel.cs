@@ -49,5 +49,15 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
         {
             _goals += goals;
         }
+
+        public void ResetPoint()
+        {
+            _points = 0;
+        }
+
+        public void ResetGoals()
+        {
+            _goals = 0;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SemihCelek.ChampionsLeague.Models.DrawGroups
         public GroupModel(char groupName)
         {
             _groupName = groupName;
-            _competingTeams = new List<ITeamModel>(4);
+            _competingTeams = new List<ITeamModel>();
         }
         
         public char GetGroupName()
